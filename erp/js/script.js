@@ -15,12 +15,34 @@ function adicionarEvento(evento, callback) {
 function cadastrarCliente() {
     const nomeCliente = document.getElementById("nome-cliente").value;
     if (nomeCliente !== "") {
-        const listaClientes = document.getElementById("lista-clientes");
-        const novoCliente = criarElemento("li", "cliente");
-        novoCliente.innerText = nomeCliente;
-        listaClientes.appendChild(novoCliente);
-        limparFormulario();
+        if (!estaCadastrado(nomeCliente)) {
+            const listaClientes = document.getElementById("lista-clientes");
+            const novoCliente = criarElemento("li", "cliente");
+            novoCliente.innerText = nomeCliente;
+            listaClientes.appendChild(novoCliente);
+            salvarCliente(nomeCliente);
+            limparFormulario();
+        } else {
+            alert(`O cliente ${nomeCliente} já está cadastrado.`);
+        }
+    } else {
+        alert("Por favor, preencha o nome do cliente.");
     }
+}
+
+function estaCadastrado(nome) {
+    const clientes = obterClientes();
+    return clientes.includes(nome);
+}
+
+function salvarCliente(nome) {
+    const clientes = obterClientes();
+    clientes.push(nome);
+    localStorage.setItem("clientes", JSON.stringify(clientes));
+}
+
+function obterClientes() {
+    return JSON.parse(localStorage.getItem("clientes")) || [];
 }
 
 function limparFormulario() {
@@ -32,12 +54,34 @@ function cadastrarVenda() {
     const produto = document.getElementById("produto").value;
     const quantidade = document.getElementById("quantidade").value;
     if (produto !== "" && quantidade !== "") {
-        const listaVendas = document.getElementById("lista-vendas");
-        const novaVenda = criarElemento("li", "venda");
-        novaVenda.innerText = `${produto} - ${quantidade}`;
-        listaVendas.appendChild(novaVenda);
-        limparFormulario();
+        if (!estaVendida(produto, parseInt(quantidade))) {
+            const listaVendas = document.getElementById("lista-vendas");
+            const novaVenda = criarElemento("li", "venda");
+            novaVenda.innerText = `${produto} - ${quantidade}`;
+            listaVendas.appendChild(novaVenda);
+            salvarVenda(produto, parseInt(quantidade));
+            limparFormulario();
+        } else {
+            alert(`A venda de ${produto} com ${quantidade} unidades já foi registrada.`);
+        }
+    } else {
+        alert("Por favor, preencha o produto e a quantidade.");
     }
+}
+
+function estaVendida(produto, quantidade) {
+    const vendas = obterVendas();
+    return vendas.find((venda) => venda.produto === produto && venda.quantidade === quantidade);
+}
+
+function salvarVenda(produto, quantidade) {
+    const vendas = obterVendas();
+    vendas.push({ produto, quantidade });
+    localStorage.setItem("vendas", JSON.stringify(vendas));
+}
+
+function obterVendas() {
+    return JSON.parse(localStorage.getItem("vendas")) || [];
 }
 
 // Funções para gerenciamento do estoque
@@ -45,12 +89,34 @@ function cadastrarEstoque() {
     const produto = document.getElementById("produto").value;
     const quantidade = document.getElementById("quantidade").value;
     if (produto !== "" && quantidade !== "") {
-        const listaEstoque = document.getElementById("lista-estoque");
-        const novoItem = criarElemento("li", "item");
-        novoItem.innerText = `${produto} - ${quantidade}`;
-        listaEstoque.appendChild(novoItem);
-        limparFormulario();
+        if (!estaEmEstoque(produto, parseInt(quantidade))) {
+            const listaEstoque = document.getElementById("lista-estoque");
+            const novoItem = criarElemento("li", "item");
+            novoItem.innerText = `${produto} - ${quantidade}`;
+            listaEstoque.appendChild(novoItem);
+            salvarEstoque(produto, parseInt(quantidade));
+            limparFormulario();
+        } else {
+            alert(`O item de ${produto} com ${quantidade} unidades já está em estoque.`);
+        }
+    } else {
+        alert("Por favor, preencha o produto e a quantidade.");
     }
+}
+
+function estaEmEstoque(produto, quantidade) {
+    const estoque = obterEstoque();
+    return estoque.find((item) => item.produto === produto && item.quantidade === quantidade);
+}
+
+function salvarEstoque(produto, quantidade) {
+    const estoque = obterEstoque();
+    estoque.push({ produto, quantidade });
+    localStorage.setItem("estoque", JSON.stringify(estoque));
+}
+
+function obterEstoque() {
+    return JSON.parse(localStorage.getItem("estoque")) || [];
 }
 
 // Eventos
@@ -63,25 +129,28 @@ const listaClientes = document.getElementById("lista-clientes");
 const listaVendas = document.getElementById("lista-vendas");
 const listaEstoque = document.getElementById("lista-estoque");
 
-// Teste para popular as listas com alguns itens
-const clientes = ["João", "Maria", "Pedro"];
-const vendas = ["Produto 1 - 10", "Produto 2 - 20"];
-const estoque = ["Item 1 - 5", "Item 2 - 15"];
+// Carregar dados dos clientes, vendas e estoque
+if (obterClientes().length > 0) {
+    obterClientes().forEach((nomeCliente) => {
+        const novoCliente = criarElemento("li", "cliente");
+        novoCliente.innerText = nomeCliente;
+        listaClientes.appendChild(novoCliente);
+    });
+}
 
-clientes.forEach((cliente) => {
-    const novoCliente = criarElemento("li", "cliente");
-    novoCliente.innerText = cliente;
-    listaClientes.appendChild(novoCliente);
-});
+if (obterVendas().length > 0) {
+    obterVendas().forEach((venda) => {
+        const novaVenda = criarElemento("li", "venda");
+        novaVenda.innerText = `${venda.produto} - ${venda.quantidade}`;
+        listaVendas.appendChild(novaVenda);
+    });
+}
 
-vendas.forEach((venda) => {
-    const novaVenda = criarElemento("li", "venda");
-    novaVenda.innerText = venda;
-    listaVendas.appendChild(novaVenda);
-});
+if (obterEstoque().length > 0) {
+    obterEstoque().forEach((item) => {
+        const novoItem = criarElemento("li", "item");
+        novoItem.innerText = `${item.produto} - ${item.quantidade}`;
+        listaEstoque.appendChild(novoItem);
+    });
+}
 
-estoque.forEach((item) => {
-    const novoItem = criarElemento("li", "item");
-    novoItem.innerText = item;
-    listaEstoque.appendChild(novoItem);
-});
