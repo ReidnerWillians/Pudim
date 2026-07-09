@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP Simples</title>
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+    <header>
+        <h1>ERP Simples</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#clientes">Clientes</a></li>
+            <li><a href="#vendas">Vendas</a></li>
+            <li><a href="#estoque">Estoque</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="clientes">
+            <h2>Cadastros de Clientes</h2>
+            <form id="form-cliente">
+                <input type="text" id="nome-cliente" placeholder="Nome do Cliente">
+                <button id="cadastrar-cliente">Cadastrar</button>
+            </form>
+            <ul id="lista-clientes"></ul>
+        </section>
+        <section id="vendas">
+            <h2>Cadastros de Vendas</h2>
+            <form id="form-venda">
+                <input type="text" id="produto" placeholder="Produto">
+                <input type="number" id="quantidade" placeholder="Quantidade">
+                <button id="cadastrar-venda">Cadastrar</button>
+            </form>
+            <ul id="lista-vendas"></ul>
+        </section>
+        <section id="estoque">
+            <h2>Cadastros de Estoque</h2>
+            <form id="form-estoque">
+                <input type="text" id="produto" placeholder="Produto">
+                <input type="number" id="quantidade" placeholder="Quantidade">
+                <button id="cadastrar-estoque">Cadastrar</button>
+            </form>
+            <ul id="lista-estoque"></ul>
+        </section>
+    </main>
+    <script src="js/script.js"></script>
+</body>
+</html>
