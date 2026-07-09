@@ -3,9 +3,13 @@ body {
 }
 
 header {
-    background-color: #f0f0f0;
-    padding: 1rem;
-    text-align: center;
+    background-color: #a1a37d;
+    display: flex;
+}
+
+img {
+    width: 100px;
+    height: 100px;
 }
 
 nav ul {
